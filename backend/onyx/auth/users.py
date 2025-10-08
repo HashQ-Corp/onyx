@@ -134,10 +134,10 @@ def is_user_admin(user: User | None) -> bool:
 
 
 def verify_auth_setting() -> None:
-    if AUTH_TYPE not in [AuthType.DISABLED, AuthType.BASIC, AuthType.GOOGLE_OAUTH]:
+    if AUTH_TYPE not in [AuthType.DISABLED, AuthType.BASIC, AuthType.GOOGLE_OAUTH, AuthType.SALESFORCE_OAUTH]:
         raise ValueError(
             "User must choose a valid user authentication method: "
-            "disabled, basic, or google_oauth"
+            "disabled, basic, google_oauth, or salesforce_oauth"
         )
     logger.notice(f"Using Auth Type: {AUTH_TYPE.value}")
 

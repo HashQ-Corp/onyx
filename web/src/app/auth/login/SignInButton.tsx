@@ -1,5 +1,5 @@
 import { AuthType } from "@/lib/constants";
-import { FaGoogle } from "react-icons/fa";
+import { FaGoogle, FaSalesforce } from "react-icons/fa";
 
 export function SignInButton({
   authorizeUrl,
@@ -16,6 +16,15 @@ export function SignInButton({
           <FaGoogle />
         </div>
         <p className="text-sm font-medium select-none">Continue with Google</p>
+      </div>
+    );
+  } else if (authType === "salesforce_oauth") {
+    button = (
+      <div className="mx-auto flex">
+        <div className="my-auto mr-2">
+          <FaSalesforce />
+        </div>
+        <p className="text-sm font-medium select-none">Continue with Salesforce</p>
       </div>
     );
   } else if (authType === "oidc") {

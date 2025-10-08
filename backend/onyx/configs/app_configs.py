@@ -131,6 +131,12 @@ OAUTH_CLIENT_SECRET = (
 # OpenID Connect configuration URL for Okta Profile Tool and other OIDC integrations
 OPENID_CONFIG_URL = os.environ.get("OPENID_CONFIG_URL") or ""
 
+# Salesforce OAuth configuration
+SALESFORCE_OAUTH_CLIENT_ID = os.environ.get("SALESFORCE_OAUTH_CLIENT_ID") or ""
+SALESFORCE_OAUTH_CLIENT_SECRET = os.environ.get("SALESFORCE_OAUTH_CLIENT_SECRET") or ""
+# Salesforce instance URL (e.g., https://login.salesforce.com or https://test.salesforce.com for sandbox)
+SALESFORCE_INSTANCE_URL = os.environ.get("SALESFORCE_INSTANCE_URL") or "https://login.salesforce.com"
+
 USER_AUTH_SECRET = os.environ.get("USER_AUTH_SECRET", "")
 
 # Duration (in seconds) for which the FastAPI Users JWT token remains valid in the user's browser.

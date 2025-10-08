@@ -451,10 +451,46 @@ def get_application(lifespan_override: Lifespan | None = None) -> FastAPI:
             prefix="/auth",
         )
 
+    if AUTH_TYPE == AuthType.SALESFORCE_OAUTH:
+        from onyx.auth.salesforce_oauth import SalesforceOAuth2
+        from onyx.configs.app_configs import SALESFORCE_INSTANCE_URL
+        from onyx.configs.app_configs import SALESFORCE_OAUTH_CLIENT_ID
+        from onyx.configs.app_configs import SALESFORCE_OAUTH_CLIENT_SECRET
+
+        # For Salesforce OAuth, refresh tokens are automatically included with refresh_token scope
+        oauth_client = SalesforceOAuth2(
+            SALESFORCE_OAUTH_CLIENT_ID,
+            SALESFORCE_OAUTH_CLIENT_SECRET,
+            instance_url=SALESFORCE_INSTANCE_URL,
+            # Salesforce scopes for user authentication
+            scopes=["openid", "email", "profile", "refresh_token"],
+        )
+        include_auth_router_with_prefix(
+            application,
+            create_onyx_oauth_router(
+                oauth_client,
+                auth_backend,
+                USER_AUTH_SECRET,
+                associate_by_email=True,
+                is_verified_by_default=True,
+                # Points the user back to the login page
+                redirect_url=f"{WEB_DOMAIN}/auth/salesforce/callback",
+            ),
+            prefix="/auth/salesforce",
+        )
+
+        # Need basic auth router for `logout` endpoint
+        include_auth_router_with_prefix(
+            application,
+            fastapi_users.get_logout_router(auth_backend),
+            prefix="/auth",
+        )
+
     if (
         AUTH_TYPE == AuthType.CLOUD
         or AUTH_TYPE == AuthType.BASIC
         or AUTH_TYPE == AuthType.GOOGLE_OAUTH
+        or AUTH_TYPE == AuthType.SALESFORCE_OAUTH
     ):
         # Add refresh token endpoint for OAuth as well
         include_auth_router_with_prefix(
